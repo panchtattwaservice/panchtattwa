@@ -7,7 +7,7 @@ const STATS = [
   { target: '95',   suffix: '%', label: 'Demolition-Free' },
 ];
 
-const PORTRAIT = 'https://github.com/panchtattwaservice/panchtattwa/blob/c7f673300703577a73e713b4ef784842d860ec64/frontend/public/Potrait.png';
+const PORTRAIT = '/Potrait.png';
 
 export default function About() {
   return (
