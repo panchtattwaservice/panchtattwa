@@ -1,0 +1,132 @@
+{
+  "project_name": "PanchTattwa — Vastu Astro Consultation",
+  "theme": "dark",
+  "archetype": "Archetype 5 (Luxury) + Archetype 1 (Organic & Earthy)",
+  "typography": {
+    "headings": "Cormorant Garamond",
+    "body": "DM Sans",
+    "hierarchy": {
+      "h1": "text-5xl sm:text-6xl tracking-tight leading-none font-medium",
+      "h2": "text-3xl sm:text-4xl tracking-tight font-medium",
+      "h3": "text-2xl sm:text-3xl",
+      "h4": "text-xl",
+      "body": "text-base leading-relaxed text-cream-dim",
+      "overline": "uppercase tracking-[0.2em] text-xs font-semibold text-gold"
+    }
+  },
+  "colors": {
+    "background": {
+      "deep": "#111009",
+      "mid": "#181510",
+      "card": "#1e1a14"
+    },
+    "text": {
+      "cream": "#ede8df",
+      "cream_dim": "#b8af9f"
+    },
+    "brand": {
+      "gold": "#c8883a",
+      "gold_light": "#ddb06a",
+      "terra": "#b85c32",
+      "terra_light": "#c97848"
+    },
+    "border": "#3a3428",
+    "tailwind_config": {
+      "background": "#111009",
+      "foreground": "#ede8df",
+      "card": "#1e1a14",
+      "card-foreground": "#ede8df",
+      "primary": "#ddb06a",
+      "primary-foreground": "#111009",
+      "secondary": "#181510",
+      "secondary-foreground": "#ede8df",
+      "accent": "#b85c32",
+      "accent-foreground": "#ede8df",
+      "border": "#3a3428"
+    }
+  },
+  "design_rules": {
+    "spacing": "Generous spacing. Use py-24 or py-32 for sections. Cards should have internal padding of p-8 or p-12.",
+    "surfaces": "Cards should have a flat background (`bg-card`), 1px subtle border (`border-border`), and no drop-shadow. Hover states should include a slight lift (`-translate-y-1`) and a subtle gold inner glow or border color change.",
+    "animations": "Implement a star field animated background on the hero section. Use spinning Mandala SVG dividers between major sections. Implement draw/bloom animations for Yantra symbols. Use scroll-reveal animations using framer-motion. Text headings should have a gold shimmer effect (using background-clip and linear-gradient).",
+    "header": "Sticky nav (`z-50`) with glassmorphism or solid deep background (`bg-deep/90 backdrop-blur-xl`) with a 1px border at the bottom (`border-border`).",
+    "footer": "Generous padding (`py-24`). Include WhatsApp contact link and important navigation.",
+    "buttons": "Primary CTA should use gold (`bg-gold-light text-[#111009]`) with sharp or slightly rounded corners (`rounded-md`). Hover state should be slightly lighter gold."
+  },
+  "layout": {
+    "strategy": "Single page application with 3-state UI (Public, Client, Admin). Use state management to toggle views without routing away.",
+    "sections": [
+      "Nav (sticky)",
+      "Hero (Animated mandala rings)",
+      "About (Consultant story)",
+      "Services (6 cards bento grid)",
+      "Why Choose Us (6 points)",
+      "Process (6 steps)",
+      "Testimonials (carousel/swiper)",
+      "Contact/Booking Form",
+      "Footer"
+    ],
+    "client_portal": [
+      "My Journey Tracker (Progress timeline)",
+      "Consultation History"
+    ],
+    "admin_portal": [
+      "Activity Calendar (Heatmap style)",
+      "Bookings Management Table (Shadcn Data Table)"
+    ]
+  },
+  "components_to_use": [
+    "lucide-react (Icons)",
+    "framer-motion (Animations, Scroll Reveal, Mandala spin)",
+    "react-fast-marquee (Optional for testimonial scroll)",
+    "shadcn/ui (Cards, Input, Form, Dialog, Dropdown, Table for Admin, Calendar for Date Picker, Tabs)"
+  ],
+  "media": {
+    "images": {
+      "hero_mandala": {
+        "url": "https://static.prod-images.emergentagent.com/jobs/ad813907-9d03-4937-bb0d-291c419b334b/images/260f039ef7afa193d6b432b982b16d67d706e6a0d3860bed84115c4eee32bcf9.png",
+        "description": "Abstract luxury 3D glowing gold mandala, use in Hero section",
+        "category": "hero"
+      },
+      "yantra_bg": {
+        "url": "https://static.prod-images.emergentagent.com/jobs/ad813907-9d03-4937-bb0d-291c419b334b/images/1c9897868d3945551fcda997ab549c070e90e8b1945a128a7696e06ffb5a9163.png",
+        "description": "Subtle dark terracotta and gold sacred geometry yantra background, use for About or Services background",
+        "category": "background"
+      },
+      "consultant_portrait": {
+        "url": "https://static.prod-images.emergentagent.com/jobs/ad813907-9d03-4937-bb0d-291c419b334b/images/213c75d05e29fb068e3f3e9901a29e6af56e61d7cb7e04d69e4dc3035f5178d0.png",
+        "description": "Elegant Indian female business consultant portrait, use in About section",
+        "category": "portrait"
+      },
+      "luxury_interior_1": {
+        "url": "https://images.pexels.com/photos/33685863/pexels-photo-33685863.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Sleek modern interior marble walls",
+        "category": "context"
+      },
+      "luxury_interior_2": {
+        "url": "https://images.pexels.com/photos/33685861/pexels-photo-33685861.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=650&w=940",
+        "description": "Luxurious modern interior marble floors",
+        "category": "context"
+      },
+      "spiritual_calm": {
+        "url": "https://images.unsplash.com/photo-1526779259212-939e64788e3c?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjA1MDZ8MHwxfHNlYXJjaHwzfHxwcmVtaXVtJTIwc3Bpcml0dWFsJTIwY2FsbSUyMGRhcmt8ZW58MHx8fHwxNzgwMTYzMDA0fDA&ixlib=rb-4.1.0&q=85",
+        "description": "Man sitting on rock surrounded by water, calm spiritual",
+        "category": "testimonials"
+      }
+    }
+  },
+  "testing": {
+    "instructions": "All interactive elements, buttons, links, form inputs, and tab triggers MUST include a `data-testid` attribute using kebab-case, role-based naming (e.g., `data-testid=\"hero-cta-button\"`, `data-testid=\"nav-login-link\"`)."
+  },
+  "instructions_to_main_agent": [
+    "Update tailwind.config.js to include the custom colors strictly mapping to the provided hex codes. Add Cormorant Garamond and DM Sans to Google Fonts in index.html.",
+    "Implement the entire UI as a Single Page App. Create a state toggle (e.g., in the Nav or a debug widget) to switch between 'public', 'client', and 'admin' views.",
+    "For the Hero section, use framer-motion to create an infinite slow rotation on the mandala SVG/image.",
+    "Implement the 'Gold Shimmer' text effect using standard CSS animations on background-position with linear-gradient background clip.",
+    "The 6 Services cards should use the Bento grid style.",
+    "Do NOT implement a separate routing system for Client/Admin. Conditionally render the 'Client Portal' or 'Admin Portal' sections over/below the main page content when logged in.",
+    "Ensure 'prefers-reduced-motion' accessibility is maintained.",
+    "Use Lucide-react for icons.",
+    "Pricing section is strictly hidden/removed."
+  ]
+}
