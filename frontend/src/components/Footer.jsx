@@ -32,7 +32,7 @@ export default function Footer({ onScrollTo }) {
             fontSize: 10, color: '#4a4035',
             letterSpacing: '0.18em', textTransform: 'uppercase', marginTop: 2,
           }}>
-            Harmonizing Spaces and Lives
+            Balance • Harmony • Pure Living
           </div>
         </div>
 
@@ -41,7 +41,7 @@ export default function Footer({ onScrollTo }) {
           fontFamily: "'DM Sans',sans-serif",
           fontSize: 12, color: '#3a3428', textAlign: 'center',
         }}>
-          © 2026 PanchTattwa · Bindiya Agrawal · +91 8154008970
+          © 2026 PanchTattwa · Bindiya Agrawal · +91 775 091 3439
         </p>
 
         {/* Links — exactly 3 as in original */}

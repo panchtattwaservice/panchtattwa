@@ -1,7 +1,7 @@
 # PanchTattwa — Vastu Astro Consultation Website
 
 ## Problem Statement
-Build a premium Vastu consultancy website for consultant Bindiya Agrawal (PanchTattwa brand). Three-state single-page app: public visitor, logged-in client, admin. Real Google OAuth authentication, PostgreSQL backend, full booking/consultation management.
+Build a premium Vastu consultancy website for consultant Bindiya Agrawal (PanchTattwa brand). Three-state single-page app: public visitor, logged-in client, consultant/admin. Real Google OAuth authentication, PostgreSQL backend, full booking/consultation management.
 
 ## Architecture
 
@@ -21,15 +21,21 @@ Build a premium Vastu consultancy website for consultant Bindiya Agrawal (PanchT
 - `users` - Google OAuth user profiles (user_id, email, name, picture, role)
 - `user_sessions` - Auth sessions (session_token, expires_at)
 - `bookings` - Consultation enquiries (service, status, contact info)
+- `consultants` - Registered consultant emails (id, email, name, is_active, added_at)
 
-## Implemented Features (as of 2026-05-30)
+## Role Hierarchy
+- **Admin**: `rahulsingh2k10@gmail.com` — full admin access + consultant console
+- **Consultant**: emails in `consultants` table (e.g., `agrawal.bindiya03@gmail.com`) — consultant console access
+- **Client**: everyone else — public site + booking form + My Journey tracker
+
+## Implemented Features (as of 2026-05-31)
 
 ### Phase 1 MVP
 - [x] Full premium dark theme (deep black #111009, gold #c8883a, terra #b85c32)
 - [x] Animated star field background (SVG circles with twinkle keyframe)
 - [x] Hero section with spinning mandala rings, floating Panch Tattwa elements
-- [x] Nav with scroll-aware backdrop blur, mobile hamburger menu
-- [x] About section with consultant portrait, bio, stats (1000+ homes, 9+ years, 95% demolition-free)
+- [x] Nav with scroll-aware backdrop blur, mobile hamburger menu (1080px breakpoint)
+- [x] About section with consultant portrait, bio, stats
 - [x] Services section — 6 service cards (bento grid)
 - [x] Why Us — 6 feature points with rotating icon hover
 - [x] Process — 6-step consultation flow
@@ -37,37 +43,46 @@ Build a premium Vastu consultancy website for consultant Bindiya Agrawal (PanchT
 - [x] Contact section — Sign-in prompt (public) / Booking form (logged in)
 - [x] Footer with brand, navigation, services, contact links
 - [x] Scroll-reveal animations (IntersectionObserver)
-- [x] Shimmer text animation on headings
-- [x] diya-breath pulse animation on CTAs
 - [x] Google OAuth via Emergent Auth
-- [x] AuthCallback — session exchange handler
 - [x] Cookie-based sessions (httpOnly, secure, samesite=none)
-- [x] Client portal: My Journey tracker (consultation progress)
-- [x] Client portal: Consultation history in Contact section
-- [x] Admin portal: AdminDashboard with stats, activity calendar, bookings table
-- [x] Admin: Update booking status via dropdown
-- [x] Pricing section hidden (as per user request)
-- [x] SEO: semantic HTML, meta tags, OG tags, Schema.org markup
-- [x] Fully responsive (mobile, tablet, desktop)
+- [x] Client portal: My Journey tracker
+- [x] Admin portal: AdminDashboard with stats, calendar, bookings table
+- [x] Responsive design (mobile, tablet, desktop)
+
+### Phase 2 — Consultant Auth (2026-05-31)
+- [x] Created `consultants` table in PostgreSQL
+- [x] Seeded consultant emails (rahulsingh2k10@gmail.com, agrawal.bindiya03@gmail.com)
+- [x] Role-based auth: admin / consultant / client
+- [x] Admin email configurable via ADMIN_EMAIL env var
+- [x] Session exchange checks consultants table for role assignment
+- [x] Both admin and consultant roles see Consultant Console/Dashboard
+- [x] /api/consultants endpoint (admin-only) to list consultants
+- [x] Frontend role checks updated (isConsultant includes admin + consultant)
+- [x] Nav dropdown shows Admin/Consultant/Client badge per role
+- [x] Booking status updates allowed for both admin and consultant roles
+- [x] Fixed auth persistence: localStorage + Bearer token (cookies unreliable in K8s proxy)
+- [x] Backend returns session_token in /api/auth/session response
+- [x] Frontend authFetch() utility auto-injects Bearer token in all API calls
+- [x] All component API calls (AdminDashboard, Contact, MyJourney) migrated to authFetch
 
 ## User Personas
-1. **Public Visitor**: Browses the marketing site, views services/process, prompted to sign in to book
+1. **Public Visitor**: Browses marketing site, views services/process, prompted to sign in
 2. **Client**: Google OAuth user, sees My Journey tracker + booking form + consultation history
-3. **Admin (Consultant)**: Bindiya Agrawal's Google account (ADMIN_EMAIL env var), sees full dashboard
+3. **Consultant**: Registered in consultants table, sees Consultant Console + booking management
+4. **Admin**: ADMIN_EMAIL holder, full access including consultant management API
 
 ## Core Config
-- ADMIN_EMAIL: bindiya@panchtattwa.com (update to actual Google email)
+- ADMIN_EMAIL: rahulsingh2k10@gmail.com
 - DATABASE_URL: postgresql+asyncpg://panchtattwa_user:panchtattwa_pass@localhost/panchtattwa_db
-- CORS_ORIGINS: https://start-here-48.preview.emergentagent.com
+- CORS_ORIGINS: https://vastu-consult-dev.preview.emergentagent.com
 
 ## Prioritized Backlog
 
 ### P0 — Critical
-- [ ] Update ADMIN_EMAIL to actual consultant Google email
 - [ ] Production PostgreSQL (persistent across container restarts)
 
 ### P1 — Important
-- [ ] Pricing section implementation (user deferred)
+- [ ] Pricing section implementation
 - [ ] Blog/articles section
 - [ ] Email notifications on booking submission
 

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="11" time="2.023" timestamp="2026-05-31T17:12:03.870790+00:00" hostname="agent-env-d77d701b-ff7b-4f16-bf1a-8017440e57d0"><testcase classname="backend.tests.test_bearer_auth" name="test_session_exchange_rejects_invalid_session_id" time="0.352" /><testcase classname="backend.tests.test_bearer_auth" name="test_session_exchange_missing_body_returns_422" time="0.048" /><testcase classname="backend.tests.test_bearer_auth" name="test_auth_me_with_bearer_returns_user_and_role" time="0.142" /><testcase classname="backend.tests.test_bearer_auth" name="test_auth_me_with_invalid_bearer_returns_401" time="0.082" /><testcase classname="backend.tests.test_bearer_auth" name="test_consultants_endpoint_with_admin_bearer" time="0.030"><failure message="sqlalchemy.exc.IntegrityError: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) &lt;class 'asyncpg.exceptions.UniqueViolationError'&gt;: duplicate key value violates unique constraint &quot;users_email_key&quot;&#10;DETAIL:  Key (email)=(rahulsingh2k10@gmail.com) already exists.&#10;[SQL: INSERT INTO users (user_id, email, name, picture, role, created_at) VALUES ($1,$2,'Bear Test','',$3,$4)]&#10;[parameters: ('TEST_user_99a08b9abad6', 'rahulsingh2k10@gmail.com', 'admin', datetime.datetime(2026, 5, 31, 17, 12, 4, 713567, tzinfo=datetime.timezone.utc))]&#10;(Background on this error at: https://sqlalche.me/e/20/gkpj)">/root/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py:550: in _prepare_and_execute
+    self._rows = deque(await prepared_stmt.fetch(*parameters))
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/asyncpg/prepared_stmt.py:177: in fetch
+    data = await self.__bind_execute(args, 0, timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/asyncpg/prepared_stmt.py:268: in __bind_execute
+    data, status, _ = await self.__do_execute(
+/root/.venv/lib/python3.11/site-packages/asyncpg/prepared_stmt.py:257: in __do_execute
+    return await executor(protocol)
+           ^^^^^^^^^^^^^^^^^^^^^^^^
+asyncpg/protocol/protocol.pyx:205: in bind_execute
+    ???
+E   asyncpg.exceptions.UniqueViolationError: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(rahulsingh2k10@gmail.com) already exists.
+
+The above exception was the direct cause of the following exception:
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/engine/default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py:585: in execute
+    self._adapt_connection.await_(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:132: in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:196: in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py:563: in _prepare_and_execute
+    self._handle_exception(error)
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py:513: in _handle_exception
+    self._adapt_connection._handle_exception(error)
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py:797: in _handle_exception
+    raise translated_error from error
+E   sqlalchemy.dialects.postgresql.asyncpg.AsyncAdapt_asyncpg_dbapi.IntegrityError: &lt;class 'asyncpg.exceptions.UniqueViolationError'&gt;: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(rahulsingh2k10@gmail.com) already exists.
+
+The above exception was the direct cause of the following exception:
+backend/tests/test_bearer_auth.py:123: in test_consultants_endpoint_with_admin_bearer
+    token, _ = asyncio.run(_seed(ADMIN_EMAIL, 'admin'))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/runners.py:190: in run
+    return runner.run(main)
+           ^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/runners.py:118: in run
+    return self._loop.run_until_complete(task)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/usr/local/lib/python3.11/asyncio/base_events.py:654: in run_until_complete
+    return future.result()
+           ^^^^^^^^^^^^^^^
+backend/tests/test_bearer_auth.py:47: in _seed
+    await s.execute(text(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/ext/asyncio/session.py:448: in execute
+    result = await greenlet_spawn(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:201: in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2372: in execute
+    return self._execute_internal(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/orm/session.py:2279: in _execute_internal
+    result = conn.execute(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1421: in execute
+    return meth(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/sql/elements.py:526: in _execute_on_connection
+    return connection._execute_clauseelement(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1643: in _execute_clauseelement
+    ret = self._execute_context(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1848: in _execute_context
+    return self._exec_single_context(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1988: in _exec_single_context
+    self._handle_dbapi_exception(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py:2365: in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/engine/base.py:1969: in _exec_single_context
+    self.dialect.do_execute(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/engine/default.py:952: in do_execute
+    cursor.execute(statement, parameters)
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py:585: in execute
+    self._adapt_connection.await_(
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:132: in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/util/_concurrency_py3k.py:196: in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py:563: in _prepare_and_execute
+    self._handle_exception(error)
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py:513: in _handle_exception
+    self._adapt_connection._handle_exception(error)
+/root/.venv/lib/python3.11/site-packages/sqlalchemy/dialects/postgresql/asyncpg.py:797: in _handle_exception
+    raise translated_error from error
+E   sqlalchemy.exc.IntegrityError: (sqlalchemy.dialects.postgresql.asyncpg.IntegrityError) &lt;class 'asyncpg.exceptions.UniqueViolationError'&gt;: duplicate key value violates unique constraint "users_email_key"
+E   DETAIL:  Key (email)=(rahulsingh2k10@gmail.com) already exists.
+E   [SQL: INSERT INTO users (user_id, email, name, picture, role, created_at) VALUES ($1,$2,'Bear Test','',$3,$4)]
+E   [parameters: ('TEST_user_99a08b9abad6', 'rahulsingh2k10@gmail.com', 'admin', datetime.datetime(2026, 5, 31, 17, 12, 4, 713567, tzinfo=datetime.timezone.utc))]
+E   (Background on this error at: https://sqlalche.me/e/20/gkpj)</failure></testcase><testcase classname="backend.tests.test_bearer_auth" name="test_bookings_get_with_consultant_bearer" time="0.110" /><testcase classname="backend.tests.test_bearer_auth" name="test_bookings_patch_with_consultant_bearer" time="0.181" /><testcase classname="backend.tests.test_bearer_auth" name="test_bookings_patch_forbidden_for_client" time="0.127" /><testcase classname="backend.tests.test_bearer_auth" name="test_logout_with_bearer_invalidates_session" time="0.199" /><testcase classname="backend.tests.test_bearer_auth" name="test_logout_without_token_still_ok" time="0.046" /><testcase classname="backend.tests.test_bearer_auth" name="test_authresponse_model_has_session_token_field" time="0.224" /></testsuite></testsuites>

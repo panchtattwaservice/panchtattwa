@@ -1,0 +1,47 @@
+{
+  "summary": "Verified consultant role-based auth feature. Backend: 12/12 pytest tests pass (health, auth/me 401, consultants 401, DB schema, seed data, admin/consultant/client role gating via direct DB-seeded sessions, session expiry). Frontend: homepage renders, AuthModal opens with Google + Consultant Sign-in buttons.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_role_auth.py",
+    "/app/test_reports/pytest/iter2_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py line 22: ADMIN_EMAIL is hardcoded ('rahulsingh2k10@gmail.com') ignoring the ADMIN_EMAIL value in backend/.env ('bindiya@panchtattwa.com'). Either remove the unused .env key or read ADMIN_EMAIL from os.environ to avoid drift between code and config.",
+    "server.py exchange_session() upserts user.role on every login. This correctly re-evaluates role from the consultants table (good), but means manual DB role overrides will be reverted on next login — intentional but worth documenting.",
+    "Lifespan calls subprocess pg_ctlcluster on every startup — fine for this preview env, but for production, PG should be managed externally rather than from the FastAPI process."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_role_auth.py"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Google OAuth via Emergent Auth — cannot be exercised end-to-end in automation. Role assignment logic verified by seeding User+UserSession rows directly into PostgreSQL and calling /api/auth/me and /api/consultants with Bearer token. Admin: rahulsingh2k10@gmail.com. Consultant: agrawal.bindiya03@gmail.com.",
+  "seed_data_creation": "Tests create temporary users/sessions prefixed with 'TEST_' and clean them up after each test. The 2 production-seeded consultants are left intact.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "PostgreSQL is up; consultants table contains rahulsingh2k10@gmail.com (admin) and agrawal.bindiya03@gmail.com (consultant). Backend tests at /app/backend/tests/test_role_auth.py validate role gating by directly seeding sessions in DB (since OAuth is opaque). All endpoints behave correctly: /api/ → 200, /api/auth/me unauthenticated → 401, /api/consultants requires admin (403 for consultant/client, 200 for admin), /api/bookings requires auth and is filterable by role. Frontend AuthModal shows both google-signin-btn and consultant-signin-btn data-testids; both wire to Emergent OAuth redirect.",
+  "api_results": {
+    "GET /api/": "200",
+    "GET /api/auth/me (unauth)": "401",
+    "GET /api/auth/me (consultant token)": "200 with role='consultant'",
+    "GET /api/consultants (unauth)": "401",
+    "GET /api/consultants (consultant)": "403",
+    "GET /api/consultants (client)": "403",
+    "GET /api/consultants (admin)": "200, returns 2 seeded consultants",
+    "GET /api/bookings (consultant)": "200, list",
+    "GET /api/auth/me (expired session)": "401"
+  },
+  "db_verification": {
+    "tables": ["bookings", "consultants", "user_sessions", "users"],
+    "consultants_seeded": ["rahulsingh2k10@gmail.com", "agrawal.bindiya03@gmail.com"],
+    "users_columns": ["user_id", "email", "name", "picture", "role", "created_at"]
+  }
+}

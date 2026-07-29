@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import StarField from './StarField';
 import SectionHeading from './SectionHeading';
 import { Phone, MessageCircle, CheckCircle } from 'lucide-react';
+import { authFetch } from '../utils/auth';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
 const SERVICES = ['Home Vastu', 'Office Vastu', 'Plot & Site Vastu', 'Astrology Reading', 'Online Consultation', 'Factory / Industrial'];
 const PROMISES = ['Practical, effective solutions', 'No pressure to renovate', 'Simple DIY remedies', 'Holistic, cosmic perspective'];
-const PHONE = '+91 8154008970';
+const PHONE = '+91 775 091 3439';
 
 export default function Contact({ user, onSignIn }) {
   const [form, setForm] = useState({ name: '', phone: '', email: '', service: '', message: '' });
@@ -27,7 +28,7 @@ export default function Contact({ user, onSignIn }) {
   // Load booking history
   useEffect(() => {
     if (!user) return;
-    fetch(`${API}/bookings`, { credentials: 'include' })
+    authFetch(`${API}/bookings`)
       .then(r => r.ok ? r.json() : [])
       .then(data => setHistory(data))
       .catch(() => {});
@@ -40,10 +41,9 @@ export default function Contact({ user, onSignIn }) {
     setSubmitting(true);
     setError('');
     try {
-      const res = await fetch(`${API}/bookings`, {
+      const res = await authFetch(`${API}/bookings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error('Failed to submit');
@@ -156,7 +156,7 @@ export default function Contact({ user, onSignIn }) {
                 </div>
               </a>
 
-              <a data-testid="contact-whatsapp" href={`https://wa.me/918154008970`} target="_blank" rel="noreferrer" style={{ display: 'flex', gap: 16, alignItems: 'flex-start', textDecoration: 'none', color: 'inherit' }}>
+              <a data-testid="contact-whatsapp" href={`https://wa.me/917750913439`} target="_blank" rel="noreferrer" style={{ display: 'flex', gap: 16, alignItems: 'flex-start', textDecoration: 'none', color: 'inherit' }}>
                 <div style={{ width: 44, height: 44, background: '#1c1710', border: '1px solid var(--border)', borderRadius: 2, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   <MessageCircle size={18} style={{ color: 'var(--gold)' }} strokeWidth={1.5} />
                 </div>

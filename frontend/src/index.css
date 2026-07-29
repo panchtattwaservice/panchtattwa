@@ -413,10 +413,15 @@ body {
   .reveal, .reveal-scale, .stagger > * { opacity: 1; transform: none; transition: none; }
 }
 
-/* Responsive */
+/* Responsive — Nav collapses at 1080px */
+@media (max-width: 1080px) {
+  .nav-links { display: none !important; }
+  .mobile-menu-btn { display: block !important; }
+}
+
+/* Responsive — Layout at 768px */
 @media (max-width: 768px) {
   .two-col { grid-template-columns: 1fr !important; }
-  .nav-links { display: none !important; }
   .auth-modal { padding: 40px 24px 30px; }
 }
 
@@ -435,5 +440,18 @@ body {
   [data-debug-wrapper="true"] > * {
     margin: inherit; padding: inherit; gap: inherit;
     border-width: inherit; border-style: inherit; border-color: inherit;
+  }
+}
+
+
+/* ── Calendar responsive cells ───────────────────────────── */
+.cal-cell {
+  aspect-ratio: 1;
+  min-height: 52px;
+}
+@media (max-width: 768px) {
+  .cal-cell {
+    aspect-ratio: auto;
+    min-height: 36px;
   }
 }

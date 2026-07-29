@@ -1,0 +1,48 @@
+{
+  "summary": "Verified Bearer-token auth persistence fix end-to-end. Backend: 23/23 pytest tests pass — POST /api/auth/session schema (rejects invalid session_id with 400, missing body with 422), AuthResponse Pydantic model contains session_token field, GET /api/auth/me / GET /api/bookings / PATCH /api/bookings / GET /api/consultants / POST /api/auth/logout all honor Authorization: Bearer header, logout invalidates the session for subsequent calls. Frontend: homepage renders without JS errors, Sign In button visible while unauth, AuthModal exposes google-signin-btn and consultant-signin-btn. E2E simulation: seeded a consultant user+session in PostgreSQL, wrote the session_token into localStorage (panchtattwa_session_token), reloaded page → Sign In disappears, user name renders top-right, useAuth.checkAuth() calls /api/auth/me with Bearer header (200), bookings fetch returns 200. Confirms the localStorage-based token persistence works as designed.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_bearer_auth.py",
+    "/app/backend/tests/test_role_auth.py",
+    "/app/test_reports/pytest/iter3_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "server.py:285-293 still sets the httponly session cookie alongside returning session_token. With SameSite=None on a same-origin K8s ingress this is harmless but redundant; the cookie is effectively dead code now that the frontend relies on Bearer. Consider removing to reduce confusion, or keep but document the fallback.",
+    "useAuth.js: signOut() calls /api/auth/logout but only sends Bearer header — backend handles that path. Good. However if the Bearer call fails (network), token is still cleared locally — safer to swallow errors as done.",
+    "useAuth.js:73 stores session_token only when present in response; this is safe but silently no-ops if backend ever stops returning it — consider logging a warning to aid future debugging.",
+    "utils/auth.js authFetch always sets credentials: 'include' which is unnecessary for Bearer-token flow and may trigger preflight in some browsers. Could be omitted now that cookies are not the source of truth.",
+    "Backend get_current_user still prefers cookie over Bearer (line 183-187). For consistency with the new design, Bearer should arguably be primary or both checked equally — current order is fine but worth a comment.",
+    "ADMIN_EMAIL is still hardcoded to 'rahulsingh2k10@gmail.com' default ignoring backend/.env (carried forward from iteration 2)."
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_bearer_auth.py",
+    "/app/backend/tests/test_role_auth.py"
+  ],
+  "success_rate": {"backend": "100%", "frontend": "100%"},
+  "test_credentials": "Auth is Google OAuth (Emergent). Tested via direct DB seed: insert user+user_session rows, place session_token in Authorization Bearer header (backend) or localStorage panchtattwa_session_token (frontend). Admin: rahulsingh2k10@gmail.com, Consultant: agrawal.bindiya03@gmail.com.",
+  "seed_data_creation": "All test rows prefixed with TEST_ (TEST_user_, TEST_bear_, TEST_tok_, TEST-BK-) and cleaned up in test teardown. A throwaway user 'user_e2e_consultant' was seeded for the frontend reload test and deleted after.",
+  "retest_needed": false,
+  "main_agent_can_self_test": true,
+  "context_for_next_testing_agent": "Bearer-token persistence verified at both layers. Tests in /app/backend/tests/test_bearer_auth.py cover: session-exchange schema, AuthResponse field, Bearer for /auth/me /bookings GET+PATCH /consultants /logout, plus 403 for client→PATCH. For end-to-end UI auth, do not rely on real Emergent OAuth — instead INSERT user+user_session in PG then set localStorage panchtattwa_session_token before reload. PostgreSQL has a real admin user (rahulsingh2k10@gmail.com → user_9545371bc269) which test helpers now upsert against instead of failing.",
+  "api_results": {
+    "POST /api/auth/session (invalid session_id)": "400",
+    "POST /api/auth/session (empty body)": "422",
+    "GET /api/auth/me (Bearer valid)": "200 with role",
+    "GET /api/auth/me (Bearer invalid)": "401",
+    "GET /api/auth/me (after logout)": "401",
+    "GET /api/consultants (admin Bearer)": "200, 2 consultants",
+    "GET /api/bookings (consultant Bearer)": "200",
+    "PATCH /api/bookings/{id} (consultant Bearer)": "200, status persisted",
+    "PATCH /api/bookings/{id} (client Bearer)": "403",
+    "POST /api/auth/logout (Bearer)": "200, session expires"
+  }
+}

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import SectionHeading from './SectionHeading';
 import StarField from './StarField';
 import { CheckCircle, Clock, FileText, Send, Award } from 'lucide-react';
+import { authFetch } from '../utils/auth';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
 
@@ -23,7 +24,7 @@ export default function MyJourney({ user }) {
   const [bookings, setBookings] = useState([]);
 
   useEffect(() => {
-    fetch(`${API}/bookings`, { credentials: 'include' })
+    authFetch(`${API}/bookings`)
       .then(r => r.ok ? r.json() : [])
       .then(setBookings)
       .catch(() => {});

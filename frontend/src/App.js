@@ -76,7 +76,8 @@ function AppRouter() {
   if (loading) return <LoadingScreen />;
 
   const isAdmin = user?.role === 'admin';
-  const isClient = user && !isAdmin;
+  const isConsultant = user?.role === 'consultant' || isAdmin;
+  const isClient = user && !isConsultant;
 
   const scrollTo = (id) => {
     setTimeout(() => {
@@ -106,9 +107,9 @@ function AppRouter() {
 
       {isClient && <MyJourney user={user} />}
 
-      <About />
+      {!isConsultant && <About />}
 
-      {isAdmin ? (
+      {isConsultant ? (
         <AdminDashboard user={user} />
       ) : (
         <>
@@ -116,7 +117,7 @@ function AppRouter() {
           <WhyUs />
           <Process />
           <Testimonials />
-          <Contact user={user} onSignIn={() => setAuthModalOpen(true)} />
+          {/* Contact section temporarily hidden */}
         </>
       )}
 

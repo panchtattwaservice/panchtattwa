@@ -1,22 +1,49 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 const API = process.env.REACT_APP_BACKEND_URL + '/api';
+const TOKEN_KEY = 'panchtattwa_session_token';
+
+function getStoredToken() {
+  try { return localStorage.getItem(TOKEN_KEY); } catch { return null; }
+}
+
+function storeToken(token) {
+  try { localStorage.setItem(TOKEN_KEY, token); } catch {}
+}
+
+function clearToken() {
+  try { localStorage.removeItem(TOKEN_KEY); } catch {}
+}
+
+function authHeaders() {
+  const token = getStoredToken();
+  const headers = { 'Cache-Control': 'no-cache' };
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+  return headers;
+}
 
 export default function useAuth() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const checkAuth = useCallback(async () => {
+    const token = getStoredToken();
+    if (!token) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
     try {
       const res = await fetch(`${API}/auth/me`, {
         credentials: 'include',
-        headers: { 'Cache-Control': 'no-cache' },
+        headers: authHeaders(),
       });
       if (res.ok) {
         const data = await res.json();
         setUser(data);
       } else {
         setUser(null);
+        clearToken();
       }
     } catch {
       setUser(null);
@@ -26,9 +53,6 @@ export default function useAuth() {
   }, []);
 
   useEffect(() => {
-    // CRITICAL: If returning from OAuth callback, skip the /me check.
-    // AuthCallback will exchange the session_id and establish the session first.
-    // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
     if (window.location.hash?.includes('session_id=')) {
       setLoading(false);
       return;
@@ -46,6 +70,9 @@ export default function useAuth() {
       });
       if (res.ok) {
         const data = await res.json();
+        if (data.session_token) {
+          storeToken(data.session_token);
+        }
         setUser(data);
         return data;
       }
@@ -56,7 +83,6 @@ export default function useAuth() {
   }, []);
 
   const signIn = useCallback(() => {
-    // REMINDER: DO NOT HARDCODE THE URL, OR ADD ANY FALLBACKS OR REDIRECT URLS, THIS BREAKS THE AUTH
     const redirectUrl = window.location.origin;
     window.location.href = `https://auth.emergentagent.com/?redirect=${encodeURIComponent(redirectUrl)}`;
   }, []);
@@ -66,8 +92,10 @@ export default function useAuth() {
       await fetch(`${API}/auth/logout`, {
         method: 'POST',
         credentials: 'include',
+        headers: authHeaders(),
       });
     } catch {}
+    clearToken();
     setUser(null);
   }, []);
 

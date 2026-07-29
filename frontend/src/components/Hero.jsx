@@ -66,8 +66,8 @@ function YantraGlyph({ shape, bija }) {
 
 export default function Hero({ user, onBook }) {
   const isAdmin = user?.role === 'admin';
-  const phone = '+91 8154008970';
-  const waNumber = '918154008970';
+  const phone = '+91 775 091 3439';
+  const waNumber = '917750913439';
 
   return (
     <section
@@ -196,8 +196,8 @@ export default function Hero({ user, onBook }) {
           Bring Positivity, Peace &amp; Prosperity to Your Life
         </p>
 
-        {/* CTAs — only for non-admin */}
-        {!isAdmin && (
+        {/* CTAs — temporarily hidden */}
+        {false && !isAdmin && (
           <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
             <button
               data-testid="hero-cta-book"
