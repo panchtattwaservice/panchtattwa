@@ -7,7 +7,7 @@ const STATS = [
   { target: '95',   suffix: '%', label: 'Demolition-Free' },
 ];
 
-const PORTRAIT = 'https://static.prod-images.emergentagent.com/jobs/ad813907-9d03-4937-bb0d-291c419b334b/images/213c75d05e29fb068e3f3e9901a29e6af56e61d7cb7e04d69e4dc3035f5178d0.png';
+const PORTRAIT = 'https://github.com/panchtattwaservice/panchtattwa/blob/c7f673300703577a73e713b4ef784842d860ec64/frontend/public/Potrait.png';
 
 export default function About() {
   return (
